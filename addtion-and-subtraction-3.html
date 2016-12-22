@@ -10,7 +10,7 @@
 <body>
   <form name="setting" onsubmit="return ask()">
     结果不大于<input name="limit" size="6" type="bumber" value="100" required="required" pattern="[0-9]{3,}" title="大于100的整数">(大于100的整数)<br>
-    一共多少题 <input name="count" size="6" type="bumber" value="10" required="required" pattern="[0-9]{2,}" title="大于10的整数">(大于10的整数)<br>
+    一共多少题 <input name="count" size="6" type="bumber" value="30" required="required" pattern="[0-9]{2,}" title="大于10的整数">(大于10的整数)<br>
     <input type="submit" value="出题"> <input type="button" value="答案" onclick="answer()"> <input type="button" value="复制" onclick="copy()">
   </form>
   <textarea id="paper" readonly="readonly" cols="36"></textarea>
