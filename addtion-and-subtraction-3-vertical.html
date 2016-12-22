@@ -99,11 +99,11 @@
   }
   
   function paddingNumber(number){
-    return blank.substr(Math.log10(number)) + number + '\n';
+    return blank.substring(('' + number).length) + number + '\n';
   }
   
   function paddingSignalNumber(signal, number){
-    return blank.substr(Math.log10(number) + 3) + printQuestionSignal(signal) + number + '\n';
+    return blank.substring(('' + number).length + 3) + printQuestionSignal(signal) + number + '\n';
   }  
 
   function printQuestionSignal(signal) {
