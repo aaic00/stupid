@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>加减法3</title>
+</head>
+
+<body>
+  <form name="setting" onsubmit="return ask()">
+    结果不大于<input name="limit" size="6" type="bumber" value="100" required="required" pattern="[0-9]{3,}" title="大于100的整数">(大于100的整数)<br>
+    一共多少题 <input name="count" size="6" type="bumber" value="10" required="required" pattern="[0-9]{2,}" title="大于10的整数">(大于10的整数)<br>
+    <input type="submit" value="出题"> <input type="button" value="答案" onclick="answer()"> <input type="button" value="复制" onclick="copy()">
+  </form>
+  <textarea id="paper" readonly="readonly" cols="36"></textarea>
+</body>
+<script>
+  var questions = [];
+
+  function copy() {
+    var paper = document.getElementById("paper");
+    paper.select();
+    document.execCommand("copy", false, null);
+    paper.blur()
+  }
+
+  function answer() {
+
+    var count = questions.length;
+
+    var paper = document.getElementById("paper");
+    paper.value = "";
+    paper.rows = count + 1;
+
+    for (var i = 0; i < count; i++) {
+      var question = questions[i];
+
+      var text = printQuetion(question, true);
+      paper.value += text;
+    }
+  }
+
+  function ask() {
+    var count = parseInt(setting.count.value);
+    var limit = parseInt(setting.limit.value);
+
+    questions = [];
+    var paper = document.getElementById("paper");
+    paper.value = "";
+    paper.rows = count + 1;
+
+    for (var i = 0; i < count; i++) {
+      var question = genQuestion(limit);
+      questions.push(question);
+
+      var text = printQuetion(question, false);
+      paper.value += text;
+      // console.log(text);
+    }
+
+    return false;
+  }
+
+  function printQuetion(question, hasResult) {
+    var text = question[0] + printQuestionSignal(question[1]) + question[2] + printQuestionSignal(question[3]) + question[4] + " = ";
+    if (hasResult) {
+      text += question[5];
+    }
+    text += "\n";
+    return text;
+  }
+
+  function printQuestionSignal(signal) {
+    if (signal === 1) {
+      return " + ";
+    } else {
+      return " - ";
+    }
+  }
+
+  function genQuestion(limit) {
+    while (true) {
+      var x = genQuestionNumber(limit);
+      var a = genQuestionSignal();
+      var y = genQuestionNumber(limit);
+
+      var s = x + a * y;
+      if (s <= 0 || s > limit) {
+        continue;
+      }
+
+      var b = genQuestionSignal();
+      var z = genQuestionNumber(limit);
+      var r = x + a * y + b * z;
+
+      if (r <= 0 || r > limit) {
+        continue;
+      }
+
+      var question = [x, a, y, b, z, r];
+
+      return question;
+    }
+  }
+
+  function genQuestionNumber(limit) {
+    while (true) {
+      var number = Math.ceil(Math.random() * limit);
+      if (number <= limit) {
+        return number;
+      }
+    }
+  }
+
+  function genQuestionSignal() {
+    var test = Math.random();
+    if (test < 0.5) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+</script>
+
+</html>
