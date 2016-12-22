@@ -37,7 +37,12 @@
 
     var paper = document.getElementById("paper");
     paper.value = "";
-    paper.rows = count + 1;
+    var rows = count + 1;
+    if(rows > 30){
+      paper.rows = 30;
+    }else{
+      paper.rows = count + 1;
+    }    
 
     for (var i = 0; i < count; i++) {
       var question = questions[i];
@@ -54,7 +59,12 @@
     questions = [];
     var paper = document.getElementById("paper");
     paper.value = "";
-    paper.rows = count + 1;
+    var rows = count + 1;
+    if(rows > 30){
+      paper.rows = 30;
+    }else{
+      paper.rows = count + 1;
+    } 
 
     for (var i = 0; i < count; i++) {
       var question = genQuestion(limit);

@@ -39,7 +39,12 @@
 
     var paper = document.getElementById("paper");
     paper.value = "";
-    paper.rows = count * 5 + 1;
+    var rows = count * 5 + 1;
+    if(rows > 30){
+      paper.rows = 30;
+    }else{
+      paper.rows = count * 5 + 1;
+    }
 
     for (var i = 0; i < count; i++) {
       var question = questions[i];
@@ -56,7 +61,12 @@
     questions = [];
     var paper = document.getElementById("paper");
     paper.value = "";
-    paper.rows = count * 5 + 1;
+    var rows = count * 5 + 1;
+    if(rows > 30){
+      paper.rows = 30;
+    }else{
+      paper.rows = count * 5 + 1;
+    }
 
     for (var i = 0; i < count; i++) {
       var question = genQuestion(limit);
@@ -72,9 +82,15 @@
 
   function printQuetion(question, hasResult) {
     
-    var text = paddingNumber(question[0]) + paddingSignalNumber(question[1], question[2]) + paddingSignalNumber(question[3], question[4]) + line;
+    var text = paddingNumber(question[0]) + paddingSignalNumber(question[1], question[2]) + line;
     if (hasResult) {
-      text += paddingNumber(question[5]);
+      text += paddingNumber(question[3]);
+    }else{
+      text += "\n";
+    }
+    text += paddingSignalNumber(question[5], question[6]) + line;
+    if (hasResult) {
+      text += paddingNumber(question[7]);
     }else{
       text += "\n";
     }
@@ -117,7 +133,7 @@
         continue;
       }
 
-      var question = [x, a, y, b, z, r];
+      var question = [x, a, y, b, s, z, r];
 
       return question;
     }
