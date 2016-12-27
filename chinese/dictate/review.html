@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+var lang = "zh-CN";
+
+var utterThis = new SpeechSynthesisUtterance();
+utterThis.voice = window.speechSynthesis.getVoices().filter(function (voice) { return voice.lang === "zh-CN"; })[0];
+utterThis.lang = lang;
+
+console.log(utterThis);
+utterThis.text = "声明：小金所所载文章与数据仅供参考；小金所任何用户的言论，都有其特定立场。您的投资决策应建立在独立思考、判断之上。";
+window.speechSynthesis.speak(utterThis);
+</script>                
+</body>
+</html>
