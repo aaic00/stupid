@@ -1,19 +1,69 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 </head>
+
 <body>
-<script>
-var lang = "zh-CN";
+  <script type="text/javascript">
+    // speak.js
+    var tts = {};
 
-var utterThis = new SpeechSynthesisUtterance();
-utterThis.voice = window.speechSynthesis.getVoices().filter(function (voice) { return voice.lang === "zh-CN"; })[0];
-utterThis.lang = lang;
+    tts.say = function (text) {
+      var lang = "zh-CN";
+      var voice = window.speechSynthesis.getVoices().filter(function (voice) {
+        return voice.lang === lang;
+      })[0]
 
-console.log(utterThis);
-utterThis.text = "声明：小金所所载文章与数据仅供参考；小金所任何用户的言论，都有其特定立场。您的投资决策应建立在独立思考、判断之上。";
-window.speechSynthesis.speak(utterThis);
-</script>                
+      var utterThis = new SpeechSynthesisUtterance();
+      utterThis.voice = voice;
+      utterThis.lang = lang;
+
+      utterThis.text = text;
+      window.speechSynthesis.speak(utterThis);
+    }
+
+
+    // dictate.js
+
+    var dictate = {
+      words: ["中国", "江苏省", "连云港市"],
+      repeat: 2,
+      repeatInterval: 1000,
+      wordInterval: 4000,
+
+      start: function () {
+        // tts.say("即将进行听写，请做好准备！");
+        setTimeout(function () {
+          dictate.read(dictate.words, 1)
+        }, this.wordInterval)
+      },
+
+      read: function (words, times) {
+        console.log(words);
+        if (words.length === 0) {
+          return;
+        } else if (times === this.repeat) {
+          tts.say(words[0]);
+          words.shift();
+          setTimeout(function () {
+            dictate.read(words, 1)
+          }, this.wordInterval)
+        } else {
+          tts.say(words[0]);
+          setTimeout(function () {
+            dictate.read(words, times + 1)
+          }, words[0].length * this.repeatInterval)
+        }
+      },
+
+    };
+
+
+
+    dictate.start();
+  </script>
 </body>
+
 </html>
