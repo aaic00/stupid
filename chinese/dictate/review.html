@@ -16,53 +16,68 @@
         return voice.lang === lang;
       })[0]
 
-      var utterThis = new SpeechSynthesisUtterance();
-      utterThis.voice = voice;
-      utterThis.lang = lang;
+      var utterance = new SpeechSynthesisUtterance();
+      utterance.voice = voice;
+      utterance.lang = lang;
 
-      utterThis.text = text;
-      window.speechSynthesis.speak(utterThis);
+      utterance.text = text;
+      window.speechSynthesis.speak(utterance);
     }
 
 
-    // dictate.js
+    // _dictate.js
 
-    var dictate = {
-      words: ["中国", "江苏省", "连云港市"],
+    var dictate = function (words, options) {
+      var _dictate = {
+        words: words.slice(0),
+        options: options,
+        _timeoutID: null,
+
+        start: function () {
+          // tts.say("即将进行听写，请做好准备！");
+          this._timeoutID = window.setTimeout(function (that) {
+            that.read(1)
+          }, this.options.wordInterval, this)
+        },
+
+        pause: function(){
+          if(this._timeoutID !== null){
+            window.clearTimeout(this._timeoutID);
+          }
+        },
+
+        read: function (times) {
+          if (this.words.length === 0) {
+            return;
+          } else if (times === this.options.repeat) {
+            tts.say(this.words[0]);
+            this.words.shift();
+            this._timeoutID = window.setTimeout(function (that) {
+              that.read(1)
+            }, this.options.wordInterval, this)
+          } else {
+            tts.say(this.words[0]);
+            this._timeoutID = window.setTimeout(function (that) {
+              that.read(times + 1)
+            }, this.words[0].length * this.options.repeatInterval, this)
+          }
+        },
+
+      };
+
+      return _dictate;
+    }
+
+
+    var words = ["中国", "江苏省", "连云港市"];
+    var options = {
       repeat: 2,
       repeatInterval: 1000,
-      wordInterval: 4000,
-
-      start: function () {
-        // tts.say("即将进行听写，请做好准备！");
-        setTimeout(function () {
-          dictate.read(dictate.words, 1)
-        }, this.wordInterval)
-      },
-
-      read: function (words, times) {
-        console.log(words);
-        if (words.length === 0) {
-          return;
-        } else if (times === this.repeat) {
-          tts.say(words[0]);
-          words.shift();
-          setTimeout(function () {
-            dictate.read(words, 1)
-          }, this.wordInterval)
-        } else {
-          tts.say(words[0]);
-          setTimeout(function () {
-            dictate.read(words, times + 1)
-          }, words[0].length * this.repeatInterval)
-        }
-      },
-
+      wordInterval: 2000,
     };
 
 
-
-    dictate.start();
+    // dictate(words, options).start();
   </script>
 </body>
 
