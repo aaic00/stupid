@@ -1,0 +1,36 @@
+"use strict"
+const map = new Map()
+const symbol = ["+", "-", "*", "/"]
+const model = new Array()
+model[0] = "`(4${symbol[i0]}4)${symbol[i1]}(4${symbol[i2]}4)`"
+model[1] = "`((4${symbol[i0]}4)${symbol[i1]}4)${symbol[i2]}4`"
+model[2] = "`(4${symbol[i0]}(4${symbol[i1]}4))${symbol[i2]}4`"
+model[3] = "`4${symbol[i0]}((4${symbol[i1]}4)${symbol[i2]}4)`"
+model[4] = "`4${symbol[i0]}(4${symbol[i1]}(4${symbol[i2]}4))`"
+for (let i0 = 0; i0 < 4; i0++) {
+  for (let i1 = 0; i1 < 4; i1++) {
+    for (let i2 = 0; i2 < 4; i2++) {
+      for (let j = 0; j < 5; j++) {
+        let expression = eval(model[j])
+        let result = eval(expression)
+        if (result >= 0 && Number.isInteger(result)) {
+          if (!map.has(result)) {
+            map.set(result, new Array())
+          }
+          map.get(result).push(expression)
+        }
+      }
+    }
+  }
+}
+
+var txt = ""
+const results = Array.from(map.keys())
+results.sort((a, b) => a - b)
+for (let result of results) {
+  for (let expression of map.get(result)) {
+    txt += `${expression} = ${result}<br>`
+  }
+}
+
+document.write(txt)
