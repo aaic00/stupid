@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>三位数乘两位数</title>
+</head>
+
+<body>
+  <form name="setting" onsubmit="return ask()">
+    一共多少题<input name="count" size="6" type="bumber" value="372" required="required" pattern="[0-9]{1,3}"
+      title="0-999">(0-999)<br>
+    <input type="submit" value="出题"> <input type="button" value="答案" onclick="answer()"> <input type="button" value="复制"
+      onclick="copy()">
+  </form>
+  <textarea id="paper" readonly="readonly" cols="36" rows="1"></textarea>
+  <p>
+    <b>
+      因为安全原因，微信浏览器内不能直接复制。<br>
+      点击右上角，“在浏览器打开”就行了。
+    </b>
+  </p>
+</body>
+<script>
+  var questions = [];
+
+  function copy() {
+    var paper = document.getElementById("paper");
+    paper.select();
+    document.execCommand("copy", false, null);
+    paper.blur()
+  }
+
+  function ask() {
+    questions = [];
+
+    var count = parseInt(setting.count.value);
+
+    var paper = document.getElementById("paper");
+    paper.value = "";
+    var rows = count + 1;
+    if (rows > 30) {
+      paper.rows = 30;
+    } else {
+      paper.rows = count + 1;
+    }
+
+    var checklist = [];
+    for (var i = 0; i <= 999; i++) {
+      checklist.push([]);
+    }
+
+    for (var i = 0; i < count; i++) {
+      var question = genQuestion(checklist);
+      questions.push(question);
+
+      var text = printQuetion(i, question, false);
+      paper.value += text;
+      // console.log(text);
+    }
+
+    return false;
+  }
+
+
+
+  function answer() {
+
+    var count = questions.length;
+
+    var paper = document.getElementById("paper");
+    paper.value = "";
+    var rows = count + 1;
+    if (rows > 30) {
+      paper.rows = 30;
+    } else {
+      paper.rows = count + 1;
+    }
+
+    for (var i = 0; i < count; i++) {
+      var question = questions[i];
+
+      var text = printQuetion(i, question, true);
+      paper.value += text;
+    }
+  }
+
+  function printQuetion(index, question, hasResult) {
+    var ordinal = index + 1;
+    var text = "[" + ordinal.toString().padStart(3, " ") + "] " + question[0] + " x " + question[1] + " = ";
+    if (hasResult) {
+      text += question[2].toString().padStart(13, " ") + " [" + ordinal.toString().padStart(3, " ") + "]";
+    }
+    text += "\n";
+    return text;
+  }
+
+  function genQuestion(checklist) {
+    while (true) {
+      var digit3 = Math.floor(Math.random() * (898) + 101);
+      var digit2 = Math.floor(Math.random() * (88) + 11);
+
+      if (checklist[digit3].indexOf(digit2) === -1) {
+        checklist[digit3].push(digit2);
+
+        var product = digit3 * digit2;
+        return [digit3, digit2, product];
+      }
+    }
+  }
+</script>
+
+</html>
